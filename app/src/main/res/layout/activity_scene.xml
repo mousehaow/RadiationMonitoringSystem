@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_scene"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/welcome"
+    android:fitsSystemWindows="true"
+    tools:context="com.imdetek.radiationmonitoringsystem.activity.SceneActivity">
+
+    <android.support.v7.widget.Toolbar
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/scene_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:gravity="center_vertical">
+            <TextView
+                android:id="@+id/back_title_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_chevron_left_white_36dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:clickable="true"
+                android:textColor="@color/white"
+                android:text="返回"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:text="一楼会议室"
+                android:textSize="19sp"/>
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+    <RelativeLayout
+        android:id="@+id/scene_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/scene_toolbar">
+        <com.imdetek.radiationmonitoringsystem.view.SceneImageView
+            android:id="@+id/scene_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/whitesmoke"
+            android:scaleType="matrix"
+            android:src="@drawable/scene1"
+            android:adjustViewBounds="true"/>
+
+
+        <com.imdetek.radiationmonitoringsystem.view.MyScrollLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/scene_image_view">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/scene_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/scene_image_view">
+
+            </android.support.v7.widget.RecyclerView>
+
+        </com.imdetek.radiationmonitoringsystem.view.MyScrollLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

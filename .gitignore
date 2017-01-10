@@ -1,0 +1,14 @@
+*.iml
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+/ijkplayer-arm64
+/ijkplayer-armv5
+/ijkplayer-armv7a
+/ijkplayer-x86
+/ijkplayer-x86_64

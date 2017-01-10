@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_welcome"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0769b1"
+    tools:context="com.imdetek.radiationmonitoringsystem.activity.WelcomeActivity">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/logo_image"
+        android:layout_marginBottom="45dp">
+
+        <TextView
+            android:id="@+id/name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="辐射监控系统"
+            android:textSize="24sp"
+            android:textColor="@color/white"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/name_tv"
+            android:layout_alignBaseline="@+id/name_tv"
+            android:layout_marginLeft="6dp"
+            android:text="1.0v"
+            android:textSize="16sp"
+            android:textColor="@color/white"/>
+
+    </RelativeLayout>
+
+    <com.imdetek.radiationmonitoringsystem.view.LogoImageView
+        android:id="@+id/logo_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/logo_r"/>
+
+    <TextView
+        android:id="@+id/loading_t"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="120dp"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:text="正在努力加载中"/>
+    <TextView
+        android:id="@+id/loading_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/loading_t"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="120dp"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:text="."/>
+
+</RelativeLayout>
