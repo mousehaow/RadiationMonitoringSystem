@@ -193,7 +193,7 @@ public class MyApplication extends Application {
     /**
      * 退出应用程序
      */
-    public  static void appExit() {
+    public static void appExit() {
         try {
             Log.d("TAG", "appExit");
             finishAllActivity();
@@ -243,6 +243,9 @@ public class MyApplication extends Application {
                 @Override
                 public void onActivityDestroyed(Activity activity) {
                     if (null == mActivitys && mActivitys.isEmpty()){
+                        if (MySocket.getInstance().getConnected()) {
+                            MySocket.getInstance().stop();
+                        }
                         return;
                     }
                     if (mActivitys.contains(activity)){

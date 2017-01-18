@@ -75,26 +75,25 @@ public class MySocket {
     private Handler mSendHandler = new Handler(){
         public void handleMessage(Message msg){
             switch(msg.what){
-                case MESSAGE_START:    //点击开始采集按钮
+                case MESSAGE_START:
                     new Thread(){
                         @Override
                         public void run() {
                             try {
-                                output.writeBytes("STA");
+                                output.writeBytes("S");
                                 output.flush();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
                         }
                     }.start();
-
                     break;
-                case MESSAGE_STOP:    //点击停止采集按钮
+                case MESSAGE_STOP:
                     new Thread(){
                         @Override
                         public void run() {
                             try {
-                                output.writeBytes("STO");
+                                output.writeBytes("T");
                                 output.flush();
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -126,14 +125,15 @@ public class MySocket {
                             float data = 0f;
                             try {
                                 jsonObject = new JSONObject(result.toString());
+                                Log.i("Socket", result.toString());
                                 id = Integer.parseInt(jsonObject.getString("id"));
-                                type = jsonObject.getString("type");
+                                type = jsonObject.getString("type").equals("D") ? "数据" : "阈值";
                                 data = Float.parseFloat(jsonObject.getString("data"));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                             DataManager.getInstance().getDataFromSocket(id, type, data);
-                            if (SettingInfo.getInstance().warning) {
+                            if (SettingInfo.getInstance().warning && type.equals("D")) {
                                 for (Record record : DataManager.getInstance().getCurrentRecords()) {
                                     if (record.getId() == id) {
                                         if (record.getThresholdValue() < data
