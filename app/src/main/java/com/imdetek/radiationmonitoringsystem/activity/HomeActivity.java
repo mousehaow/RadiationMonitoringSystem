@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Process;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,7 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class HomeActivity extends BaseActivity {
+public class HomeActivity extends BaseActivity implements MySocket.SocketCloseCallBack {
 
     public static String[] tabTitle = {"区域地图", "设备列表", "报警记录"};
     @BindView(R.id.tab_picker)
@@ -122,7 +123,21 @@ public class HomeActivity extends BaseActivity {
                     timer.schedule(task, 2000);
                     return true;
                 } else {
-                    finish();
+                    MySocket.getInstance().closeCallBack = this;
+                    MySocket.getInstance().context = this;
+                    DataManager manager = DataManager.getInstance();
+                    manager.setSceneList(manager.getSceneList());
+                    manager.setEquipmentList(manager.getEquipmentList());
+                    for (Record record : manager.getCurrentRecords()) {
+                        if (record.getValues().size() == 0) {
+                            continue;
+                        }
+                        record.setEndTime(new Date());
+                        manager.addToEquipmentRecordsList(record.getId(), record.clone());
+                    }
+                    MySocket.getInstance().stop();
+                    //Process.killProcess(Process.myPid());
+                    //System.exit(0);
                 }
             default:
                 return super.onKeyDown(keyCode, event);
@@ -131,19 +146,9 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        DataManager manager = DataManager.getInstance();
-        manager.setSceneList(manager.getSceneList());
-        manager.setEquipmentList(manager.getEquipmentList());
-        for (Record record : manager.getCurrentRecords()) {
-            if (record.getValues().size() == 0) {
-                continue;
-            }
-            record.setEndTime(new Date());
-            manager.addToEquipmentRecordsList(record.getId(), record.clone());
-        }
-        MySocket.getInstance().stop();
-        Process.killProcess(Process.myPid());
-        System.exit(0);
+
+        Log.i("Home", "destory");
+
         super.onDestroy();
     }
 
@@ -151,5 +156,10 @@ public class HomeActivity extends BaseActivity {
     public void onClick() {
         Intent intent = new Intent(HomeActivity.this, SettingActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void successCloseCallBack() {
+        finish();
     }
 }

@@ -95,6 +95,41 @@ public class MySocket {
                             try {
                                 output.writeBytes("T");
                                 output.flush();
+                                if(!socket.isInputShutdown()){
+                                    try {
+                                        socket.shutdownInput();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                                if(!socket.isOutputShutdown()){
+                                    try {
+                                        socket.shutdownOutput();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                mReceiveThread.interrupt();
+                                if(socket.isConnected() || !socket.isClosed()){
+                                    try {
+                                        socket.close();
+                                        isConnected = false;
+                                        if (context != null) {
+                                            context.runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    if (closeCallBack != null) {
+                                                        Log.i("Socket", "关闭成功");
+                                                        closeCallBack.successCloseCallBack();
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -125,7 +160,7 @@ public class MySocket {
                             float data = 0f;
                             try {
                                 jsonObject = new JSONObject(result.toString());
-                                Log.i("Socket", result.toString());
+                                //Log.i("Socket", result.toString());
                                 id = Integer.parseInt(jsonObject.getString("id"));
                                 type = jsonObject.getString("type").equals("D") ? "数据" : "阈值";
                                 data = Float.parseFloat(jsonObject.getString("data"));
@@ -133,7 +168,7 @@ public class MySocket {
                                 e.printStackTrace();
                             }
                             DataManager.getInstance().getDataFromSocket(id, type, data);
-                            if (SettingInfo.getInstance().warning && type.equals("D")) {
+                            if (SettingInfo.getInstance().warning && type.equals("数据")) {
                                 for (Record record : DataManager.getInstance().getCurrentRecords()) {
                                     if (record.getId() == id) {
                                         if (record.getThresholdValue() < data
@@ -191,6 +226,9 @@ public class MySocket {
                             manager.setEquipmentList(manager.getEquipmentList());
                             List<Record> records = manager.getCurrentRecords();
                             for (Record record : records) {
+                                if (record.getValues().size() == 0) {
+                                    continue;
+                                }
                                 record.setEndTime(new Date());
                                 manager.addToEquipmentRecordsList(record.getId(), record);
                             }
@@ -267,45 +305,6 @@ public class MySocket {
             public void run() {
                 if(mSendHandler != null){
                     mSendHandler.sendEmptyMessage(MESSAGE_STOP);
-                }
-                if(!socket.isInputShutdown()){
-                    try {
-                        socket.shutdownInput();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                if(!socket.isOutputShutdown()){
-                    try {
-                        socket.shutdownOutput();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                if(mReceiveThread.isAlive()){
-                    mReceiveThread.interrupt();
-                }
-
-                if(socket.isConnected() || !socket.isClosed()){
-                    try {
-                        socket.close();
-                        isConnected = false;
-                        if (context != null) {
-                            context.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (closeCallBack != null) {
-                                        Log.i("Socket", "关闭成功");
-                                        closeCallBack.successCloseCallBack();
-                                    }
-                                }
-                            });
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                 }
             }
         }.start();

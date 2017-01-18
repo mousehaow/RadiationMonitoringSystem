@@ -5,10 +5,12 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Process;
 import android.util.Log;
 
 import com.imdetek.radiationmonitoringsystem.connect.MySocket;
 import com.imdetek.radiationmonitoringsystem.entity.DataManager;
+import com.imdetek.radiationmonitoringsystem.entity.Record;
 
 import java.util.Collections;
 import java.util.Date;
@@ -56,7 +58,23 @@ public class MyApplication extends Application {
 
     @Override
     public void onTerminate() {
-        endTime = new Date();
+        //endTime = new Date();
+        Log.i("Application", "application destory");
+        if (MySocket.getInstance().getConnected()) {
+            MySocket.getInstance().stop();
+            DataManager manager = DataManager.getInstance();
+            manager.setSceneList(manager.getSceneList());
+            manager.setEquipmentList(manager.getEquipmentList());
+            for (Record record : manager.getCurrentRecords()) {
+                if (record.getValues().size() == 0) {
+                    continue;
+                }
+                record.setEndTime(new Date());
+                manager.addToEquipmentRecordsList(record.getId(), record.clone());
+            }
+            Log.i("Home", "destory");
+            Process.killProcess(Process.myPid());
+        }
         super.onTerminate();
     }
     /**
@@ -243,9 +261,6 @@ public class MyApplication extends Application {
                 @Override
                 public void onActivityDestroyed(Activity activity) {
                     if (null == mActivitys && mActivitys.isEmpty()){
-                        if (MySocket.getInstance().getConnected()) {
-                            MySocket.getInstance().stop();
-                        }
                         return;
                     }
                     if (mActivitys.contains(activity)){

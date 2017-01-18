@@ -39,6 +39,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private TextView loadText;
     private ImageView loadingIcon;
     private int count = 0;
+    private boolean needPromission = false;
 
 
     @Override
@@ -79,8 +80,6 @@ public class WelcomeActivity extends AppCompatActivity {
                 }
             }
         }.start();
-
-        permission();
     }
 
     private void refreshView() {
@@ -118,6 +117,35 @@ public class WelcomeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        permission();
+    }
+
+    private void permission(){
+        if (Build.VERSION.SDK_INT >= 23) {
+            if(!Settings.canDrawOverlays(MyApplication.mContext)) {
+                new MaterialDialog.Builder(this)
+                        .title("提醒")
+                        .content("程序需要您打开通知权限。")
+                        .positiveText("确定")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                dialog.dismiss();
+                                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+                                startActivity(intent);
+                            }
+                        })
+                        .show();
+                return;
+            } else {
+                initSetting();
+            }
+        } else {
+            initSetting();
+        }
+    }
+
+    private void initSetting() {
         MySoundPool.getInstance().putSound(MyApplication.mContext);
         new Handler().postDelayed(new Runnable() {
             public void run() {
@@ -165,26 +193,6 @@ public class WelcomeActivity extends AppCompatActivity {
         }, 4900);
     }
 
-    private void permission(){
-        if (Build.VERSION.SDK_INT >= 23) {
-            if(!Settings.canDrawOverlays(MyApplication.mContext)) {
-                new MaterialDialog.Builder(this)
-                        .title("提醒")
-                        .content("程序需要您打开通知权限。")
-                        .positiveText("确定")
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                dialog.dismiss();
-                                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
-                                startActivity(intent);
-                            }
-                        })
-                        .show();
-                return;
-            }
-        }
-    }
     public int dip2px(Context context, float dpValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
