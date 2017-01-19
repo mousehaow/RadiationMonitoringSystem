@@ -48,12 +48,12 @@ import java.util.List;
  */
 public class MySocket {
 
-    public static interface SocketConnectCallBack{
-        public void successCallBack();
-        public void failCallBack();
+    public interface SocketConnectCallBack{
+        void successCallBack();
+        void failCallBack();
     }
-    public static interface SocketCloseCallBack{
-        public void successCloseCallBack();
+    public interface SocketCloseCallBack{
+        void successCloseCallBack();
     }
 
     public static final int MESSAGE_START=11;
