@@ -127,7 +127,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     needPromission = true;
                     new MaterialDialog.Builder(this)
                             .title("提醒")
-                            .content("程序需要您打开通知权限。")
+                            .content("程序需要您打开系统通知权限。")
                             .positiveText("确定")
                             .onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override
