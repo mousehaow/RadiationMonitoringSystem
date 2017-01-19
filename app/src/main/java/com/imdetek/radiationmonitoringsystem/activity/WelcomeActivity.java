@@ -123,26 +123,26 @@ public class WelcomeActivity extends AppCompatActivity {
     private void permission(){
         if (Build.VERSION.SDK_INT >= 23) {
             if(!Settings.canDrawOverlays(MyApplication.mContext)) {
-                new MaterialDialog.Builder(this)
-                        .title("提醒")
-                        .content("程序需要您打开通知权限。")
-                        .positiveText("确定")
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                dialog.dismiss();
-                                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
-                                startActivity(intent);
-                            }
-                        })
-                        .show();
-                return;
-            } else {
-                initSetting();
+                if (!needPromission) {
+                    needPromission = true;
+                    new MaterialDialog.Builder(this)
+                            .title("提醒")
+                            .content("程序需要您打开通知权限。")
+                            .positiveText("确定")
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    dialog.dismiss();
+                                    Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+                                    startActivity(intent);
+                                }
+                            })
+                            .show();
+                    return;
+                }
             }
-        } else {
-            initSetting();
         }
+        initSetting();
     }
 
     private void initSetting() {
