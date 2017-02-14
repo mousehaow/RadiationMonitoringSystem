@@ -44,7 +44,6 @@ public class MainActivity extends BaseActivity {
 
     private List<Scene> mScene = new ArrayList<>();
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -67,6 +67,16 @@ public class SceneListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 mListener.onItemClicked(mData.get(position).getId());
             }
         });
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Log.i("ClickLong", "" + position);
+                if (!mData.get(position).isOnLine()) {
+                    mListener.onItemLongClicked(mData.get(position).getId());
+                }
+                return true;
+            }
+        });
         if (mData.get(position).getCurrentValue() < mData.get(position).getThresholdValue()) {
             holder.mCardView.setCardBackgroundColor(Color.parseColor("#00BF79"));
         } else {

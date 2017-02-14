@@ -125,6 +125,11 @@ public class WarningFragment extends Fragment {
             }
 
             @Override
+            public void onItemLongClicked(int id) {
+
+            }
+
+            @Override
             public void onItemSceneBtnClicked(int id) {
                 Intent intent = new Intent(getActivity(), VideoActivity.class);
                 intent.putExtra(VideoActivity.TAG, id);

@@ -127,14 +127,15 @@ public class WelcomeActivity extends AppCompatActivity {
                     needPromission = true;
                     new MaterialDialog.Builder(this)
                             .title("提醒")
-                            .content("程序需要您打开系统通知权限。")
+                            .content("程序需要您打开系统悬窗通知权限。")
                             .positiveText("确定")
                             .onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                     dialog.dismiss();
                                     Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
-                                    startActivity(intent);
+                                    //startActivity(intent);
+                                    startActivityForResult(intent, 220);
                                 }
                             })
                             .show();
@@ -145,12 +146,22 @@ public class WelcomeActivity extends AppCompatActivity {
         initSetting();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 220) {
+            if (Build.VERSION.SDK_INT >= 23) {
+                if(Settings.canDrawOverlays(MyApplication.mContext)) {
+                    MyToast.showToastShort("授权成功!");
+                }
+            }
+        }
+    }
+
     private void initSetting() {
         MySoundPool.getInstance().putSound(MyApplication.mContext);
         new Handler().postDelayed(new Runnable() {
             public void run() {
                 /* Create an Intent that will start the Main WordPress Activity. */
-                Log.i("hello", "start");
                 DataManager.getInstance().getSceneList();
                 DataManager.getInstance().getEquipmentList();
                 DataManager.getInstance().initEquipmentList();
@@ -159,7 +170,6 @@ public class WelcomeActivity extends AppCompatActivity {
                 SettingInfo.getInstance().port = settings.getInt("port", 8080);
                 SettingInfo.getInstance().warning = settings.getBoolean("warning", true);
                 SettingInfo.getInstance().sounds = settings.getBoolean("sounds", true);
-                Log.i("hello", "initOver");
                 MySocket.getInstance().context = context;
                 MySocket.getInstance().callBack = new MySocket.SocketConnectCallBack() {
                     @Override

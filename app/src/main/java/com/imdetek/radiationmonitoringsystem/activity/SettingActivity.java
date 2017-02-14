@@ -1,9 +1,11 @@
 package com.imdetek.radiationmonitoringsystem.activity;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -88,6 +90,11 @@ public class SettingActivity extends BaseActivity {
 
 
     private void socketConnect() {
+        InputMethodManager imm =  (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        if(imm != null) {
+            imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(),
+                    0);
+        }
         MySocket.getInstance().context = this;
         MySocket.getInstance().callBack = new MySocket.SocketConnectCallBack() {
             @Override

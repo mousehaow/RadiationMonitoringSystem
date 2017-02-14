@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.imdetek.radiationmonitoringsystem.connect.MySocket;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -189,6 +188,13 @@ public class DataManager {
             }
         }
         mSceneList = sceneList;
+    }
+
+    public void  deleteEquipmentRecords(int id) {
+        File file = new File(EQUIPMENT_LIST_PATH +"/" + id + Record_FILE_NAME);
+        if (file.exists()) {
+            file.delete();
+        }
     }
 
     public List<Record> getEquipmentRecordsList(int id) {
@@ -403,5 +409,33 @@ public class DataManager {
             }
         }
         return -1;
+    }
+
+    public void deleteEquipment(int id) {
+        Equipment removeEqi = null;
+        for (Equipment equipment : mEquipmentList) {
+            if (equipment.getId() == id) {
+                removeEqi = equipment;
+            }
+        }
+        if (removeEqi != null) {
+            mEquipmentList.remove(removeEqi);
+        }
+        Scene rScene = null;
+        Integer rInteger = null;
+        for (Scene scene : mSceneList) {
+            for (Integer integer : scene.equipmentsIdList) {
+                if (integer.intValue() == id) {
+                    rScene = scene;
+                    rInteger = integer;
+                }
+            }
+        }
+        if (rScene != null) {
+            rScene.equipmentsIdList.remove(rInteger);
+        }
+        setEquipmentList(mEquipmentList);
+        setSceneList(mSceneList);
+        deleteEquipmentRecords(id);
     }
 }

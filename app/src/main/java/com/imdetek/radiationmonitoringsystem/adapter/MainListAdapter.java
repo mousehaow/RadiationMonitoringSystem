@@ -32,6 +32,7 @@ public class MainListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public static interface OnItemTouchedListener {
         public void onItemClicked(int id);
+        public void onItemLongClicked(int id);
         public void onItemSceneBtnClicked(int id);
     }
 
@@ -68,6 +69,7 @@ public class MainListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.i("Click", "" + position);
                 mListener.onItemClicked(mData.get(position).getId());
             }
         });

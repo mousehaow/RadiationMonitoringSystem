@@ -96,23 +96,22 @@ public class SceneActivity extends BaseActivity {
         for (Equipment equipment : mEquipments) {
             if (equipment.getScene().equals(scene)) {
                 ccc++;
-                int num = (int) (Math.random() * 100);
                 if (ccc == 1) {
-                    equipment.setOnLine(true);
+                    //equipment.setOnLine(true);
                     float x = 0.5f;
                     float y = 0.5f;
                     equipment.setLocalX(x);
                     equipment.setLocalY(y);
                 }
                 if (ccc == 2) {
-                    equipment.setOnLine(true);
+                    //equipment.setOnLine(true);
                     float x = 0.75f;
                     float y = 0.5f;
                     equipment.setLocalX(x);
                     equipment.setLocalY(y);
                 }
                 if (ccc == 3) {
-                    equipment.setOnLine(true);
+                    //equipment.setOnLine(true);
                     float x = 0.25f;
                     float y = 0.75f;
                     equipment.setLocalX(x);
@@ -300,6 +299,11 @@ public class SceneActivity extends BaseActivity {
                 Intent intent = new Intent(SceneActivity.this, DetailsActivity.class);
                 intent.putExtra(DetailsActivity.TAG, id);
                 startActivity(intent);
+            }
+
+            @Override
+            public void onItemLongClicked(int id) {
+
             }
 
             @Override

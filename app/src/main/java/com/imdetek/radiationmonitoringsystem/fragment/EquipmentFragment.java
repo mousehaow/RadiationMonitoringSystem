@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +15,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.imdetek.radiationmonitoringsystem.MyApplication;
 import com.imdetek.radiationmonitoringsystem.R;
 import com.imdetek.radiationmonitoringsystem.activity.DetailsActivity;
 import com.imdetek.radiationmonitoringsystem.activity.SceneActivity;
@@ -111,6 +115,25 @@ public class EquipmentFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), DetailsActivity.class);
                 intent.putExtra(DetailsActivity.TAG, id);
                 startActivity(intent);
+            }
+
+            @Override
+            public void onItemLongClicked(final int id) {
+                Log.i("ClickLong", "" + id);
+                new MaterialDialog.Builder(MyApplication.currentActivity())
+                        .title("警告")
+                        .content("您确定要删除设备No." + id + "，以及其所有数据?")
+                        .positiveText("确定")
+                        .negativeText("取消")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                DataManager.getInstance().deleteEquipment(id);
+                                dialog.dismiss();
+
+                            }
+                        })
+                        .show();
             }
 
             @Override
